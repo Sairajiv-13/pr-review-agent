@@ -1,0 +1,54 @@
+name: "PR Review Agent"
+description: "AI pull request review with a safe dry-run default. Prints the review to the job log unless post is true."
+author: "Sai Rajiv Nagula"
+inputs:
+  provider:
+    description: "Review provider: mock (no key, rule based) or openai (any OpenAI-compatible endpoint)."
+    required: false
+    default: "mock"
+  post:
+    description: "Set to true to post the review on the pull request. Default false means dry-run."
+    required: false
+    default: "false"
+  model:
+    description: "Model name for the openai provider."
+    required: false
+    default: "gpt-4o-mini"
+  base-url:
+    description: "Base URL for an OpenAI-compatible endpoint."
+    required: false
+    default: "https://api.openai.com/v1"
+  api-key:
+    description: "API key for the openai provider. Pass it from secrets, for example ${{ secrets.OPENAI_API_KEY }}."
+    required: false
+    default: ""
+  max-tokens:
+    description: "Token budget per review chunk."
+    required: false
+    default: "6000"
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+    - name: Install pr-review-agent
+      shell: bash
+      run: python -m pip install "${{ github.action_path }}"
+    - name: Run review
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        PR_REVIEW_API_KEY: ${{ inputs.api-key }}
+        PR_REVIEW_MODEL: ${{ inputs.model }}
+        OPENAI_BASE_URL: ${{ inputs.base-url }}
+      run: |
+        args=(review --repo "${{ github.repository }}" --pr "${{ github.event.pull_request.number }}" --provider "${{ inputs.provider }}" --max-tokens "${{ inputs.max-tokens }}")
+        if [ "${{ inputs.post }}" = "true" ]; then
+          args+=(--post)
+        fi
+        pr-review "${args[@]}"
+branding:
+  icon: "git-pull-request"
+  color: "purple"
