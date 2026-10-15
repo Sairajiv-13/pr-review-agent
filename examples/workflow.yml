@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Dry-run review with the mock provider
-        uses: Sairajiv-13/pr-review-agent@v0.1.0
+        uses: Sairajiv-13/pr-review-agent@v1.0.0
         with:
           provider: mock
           post: "false"
@@ -31,7 +31,7 @@ jobs:
       # above) when you are ready for comments on the PR itself.
       #
       # - name: Review with a model and post comments
-      #   uses: Sairajiv-13/pr-review-agent@v0.1.0
+      #   uses: Sairajiv-13/pr-review-agent@v1.0.0
       #   with:
       #     provider: openai
       #     post: "true"
