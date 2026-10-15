@@ -19,7 +19,7 @@ inputs:
     required: false
     default: "https://api.openai.com/v1"
   api-key:
-    description: "API key for the openai provider. Pass it from secrets, for example ${{ secrets.OPENAI_API_KEY }}."
+    description: "API key for the openai provider. Pass it from your repository secrets."
     required: false
     default: ""
   max-tokens:
