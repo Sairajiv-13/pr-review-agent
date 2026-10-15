@@ -1,0 +1,36 @@
+diff --git a/src/app.py b/src/app.py
+index 1234567..89abcde 100644
+--- a/src/app.py
++++ b/src/app.py
+@@ -1,7 +1,9 @@
+ import os
+ import sys
++API_KEY = "sk-live-9f8e7d6c5b4a3210"
+ def load_config():
+     return {"debug": False}
+ def main():
+     config = load_config()
++    print("config loaded", config)
+     run(config)
+diff --git a/src/worker.py b/src/worker.py
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/worker.py
+@@ -0,0 +1,6 @@
++import time
++
++
++def poll(queue):
++    # TODO: add backoff before retrying
++    return queue.pop()
+diff --git a/src/report.py b/src/report.py
+new file mode 100644
+index 0000000..2222222
+--- /dev/null
++++ b/src/report.py
+@@ -0,0 +1,4 @@
++def summarize(rows):
++    total = sum(r.value for r in rows)
++    count = len(rows)
++    return {"total": total, "count": count}

@@ -1,0 +1,39 @@
+# Example consumer workflow. Copy this into .github/workflows/pr-review.yml
+# in your own repository.
+#
+# Safe first run: the defaults below use the mock provider and dry-run mode.
+# The review is printed to the job log and nothing is posted on the PR.
+# No API key is needed for this mode.
+
+name: PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dry-run review with the mock provider
+        uses: Sairajiv-13/pr-review-agent@v0.1.0
+        with:
+          provider: mock
+          post: "false"
+
+      # Real review, once you have tried the dry run. Add an OPENAI_API_KEY
+      # repository secret, then switch to this step (and remove the one
+      # above) when you are ready for comments on the PR itself.
+      #
+      # - name: Review with a model and post comments
+      #   uses: Sairajiv-13/pr-review-agent@v0.1.0
+      #   with:
+      #     provider: openai
+      #     post: "true"
+      #     model: gpt-4o-mini
+      #     api-key: ${{ secrets.OPENAI_API_KEY }}
