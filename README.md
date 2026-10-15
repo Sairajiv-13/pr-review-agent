@@ -9,6 +9,24 @@ nothing.
 
 Built by Sai Rajiv Nagula.
 
+## Problem
+
+Review time is the bottleneck on most teams, and the first pass is usually mechanical: a leaked secret pattern, a debug print, an unfinished TODO, a risky construct. Human reviewers should spend their attention on judgment, not on catching a print statement.
+
+## Approach
+
+A CLI and a GitHub Action that read a pull request diff, map each finding to its exact diff position, and post the findings as a structured review. Providers are pluggable: any OpenAI compatible endpoint for real reviews, and a deterministic mock provider that needs no key. Dry run is the default. Nothing is posted unless posting is explicitly switched on, and secret checks never print the matched values.
+
+## Results
+
+- 36 tests, 89 percent coverage, ruff clean, green CI
+- Working proof in this repo: the action reviewed its own demo pull request and posted two findings at the exact lines: https://github.com/Sairajiv-13/pr-review-agent/pull/1
+- Released as v1.0.0. Consumer workflows pin the release tag
+
+## Tech stack
+
+Python 3.12, GitHub Actions (composite action), GitHub Reviews API, Docker, GitHub Actions CI
+
 ## See it run
 
 The repository ships a crafted sample diff (`examples/sample.diff`) with a
