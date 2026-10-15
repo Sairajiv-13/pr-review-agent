@@ -12,4 +12,4 @@ jobs:
       - uses: ./
         with:
           provider: mock
-          dry_run: false
+          post: "true"
